@@ -40,17 +40,26 @@ class StackOverflow(BotPlugin):
 
         API_ENDPOINT = 'https://api.stackexchange.com/2.2/search'
         RESULT_LIMIT = 5
+        response = ''
 
         #api_key = self._get_api_key()
   
         request_url = '%s?pagesize=%d&order=desc&sort=votes&intitle=%s&site=stackoverflow' % (API_ENDPOINT, RESULT_LIMIT, args[0])
-        print request_url
+
         r = requests.get(request_url)
+        log.debug('url sent: {}'.format(request_url))
+
         results = r.json()
+        result_count = len(results['items'])
+
+        if result_count != 0:
+            for each_result in results['items']:
+                response += '|{score}| {title}: {link} ({answer_count}) \n'.format(score=each_result['score'], title=each_result['title'], link=each_result['link'], answer_count=each_result['answer_count'])
+        else:
+            response = 'No results found for {}'.format(args[0])
         
-        #self.send(msg.frm,
-        #          response,
-        #          message_type=msg.type,
-        #          in_reply_to=msg,
-        #          groupchat_nick_reply=True)
-        return results
+        self.send(msg.frm,
+                  response,
+                  message_type=msg.type,
+                  in_reply_to=msg,
+                  groupchat_nick_reply=True)
