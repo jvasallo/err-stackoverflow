@@ -41,10 +41,14 @@ class StackOverflow(BotPlugin):
         API_ENDPOINT = 'https://api.stackexchange.com/2.2/search'
         RESULT_LIMIT = 5
         response = ''
-
+        
+        # API Key logic not completed as stack exchange allows 10k queries per day.
+        # 10K sounds like a sufficient amount of requests, if more is needed add the layer
+        # Below
         #api_key = self._get_api_key()
   
-        request_url = '%s?pagesize=%d&order=desc&sort=votes&intitle=%s&site=stackoverflow' % (API_ENDPOINT, RESULT_LIMIT, args[0])
+        request_url = '%s?pagesize=%d&order=desc&sort=votes&intitle=%s&site=stackoverflow' % (API_ENDPOINT, RESULT_LIMIT, args)
+        print args
 
         r = requests.get(request_url)
         log.debug('url sent: {}'.format(request_url))
@@ -56,7 +60,7 @@ class StackOverflow(BotPlugin):
             for each_result in results['items']:
                 response += '|{score}| {title}: {link} ({answer_count}) \n'.format(score=each_result['score'], title=each_result['title'], link=each_result['link'], answer_count=each_result['answer_count'])
         else:
-            response = 'No results found for {}'.format(args[0])
+            response = 'No results found for {}'.format(args)
         
         self.send(msg.frm,
                   response,
