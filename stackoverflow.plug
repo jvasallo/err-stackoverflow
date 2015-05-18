@@ -6,4 +6,4 @@ Module = stackoverflow
 Version = 2+
 
 [Documentation]
-Description = Returns top 5 stackoverflow results.
+Description = Returns top 5 stackoverflow results
