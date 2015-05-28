@@ -48,7 +48,7 @@ class StackOverflow(BotPlugin):
         #api_key = self._get_api_key()
   
         request_url = '%s?pagesize=%d&order=desc&sort=votes&intitle=%s&site=stackoverflow' % (API_ENDPOINT, RESULT_LIMIT, args)
-        print args
+        log.debug(args)
 
         r = requests.get(request_url)
         log.debug('url sent: {}'.format(request_url))
